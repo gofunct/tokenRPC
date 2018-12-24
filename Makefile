@@ -17,6 +17,8 @@ client:
 	@echo "Done building."
 	@echo "Run \"$(GOBIN)/client\" to launch client."
 
+gen:
+	cd contracts/name_service; docker run -v `pwd`:/defs colemanword/protoc-all -f name_service.proto -l go
 build: ## build docker image
 	bash build.sh
 
