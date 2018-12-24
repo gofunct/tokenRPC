@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	contracts "contracts"
+	contracts "github.com/gofunct/hack/contracts/name_service"
 	flag "github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
