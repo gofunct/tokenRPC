@@ -1,24 +1,24 @@
 filename:=$(shell echo '$(name)' | perl -pe 's/([A-Z])/_\L\1/g' | sed 's/^_//')
 
-run: ## make run name=token_service pkg=token_service
+sol2proto: ## make sol2proto name=token_service pkg=token_service
 	mkdir -p contracts/$(pkg)
 	sol2proto --pkg $(pkg) --abi $(name).abi > contracts/$(pkg)/$(pkg).proto
-	protoc --go_out=plugins=grpc:. contracts/$(pkg)/$(pkg).proto
+
+abigen: ## make abigen name=token_service pkg=token_service
 	abigen --type $(name) --abi $(name).abi --pkg $(pkg) --out ./contracts/$(pkg)/$(pkg).go --bin $(name).bin
+
+contract: ## make contract name=token_service pkg=token_service
 	grpc-contract -type $(pkg) -path ./contracts/$(pkg) > ./contracts/$(pkg)/$(pkg)_server.go
 
 server:
 	go build -v -o ./build/bin/server ./cmd/server
-	@echo "Done building."
-	@echo "Run \"$(GOBIN)/server\" to launch server."
 
 client:
 	go build -v -o ./build/bin/client ./cmd/client
-	@echo "Done building."
-	@echo "Run \"$(GOBIN)/client\" to launch client."
 
 gen:
 	cd contracts/token_service; docker run -v `pwd`:/defs colemanword/protoc-all -f token_service.proto -l go && mv gen/pb-go/* .
+
 build: ## build docker image
 	bash build.sh
 
