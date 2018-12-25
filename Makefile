@@ -1,6 +1,6 @@
 filename:=$(shell echo '$(name)' | perl -pe 's/([A-Z])/_\L\1/g' | sed 's/^_//')
 
-run: ## make run name=NameService pkg=name_service
+run: ## make run name=token_service pkg=token_service
 	mkdir -p contracts/$(pkg)
 	sol2proto --pkg $(pkg) --abi $(name).abi > contracts/$(pkg)/$(pkg).proto
 	protoc --go_out=plugins=grpc:. contracts/$(pkg)/$(pkg).proto

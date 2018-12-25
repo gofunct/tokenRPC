@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package token_service;
+
+import public "github.com/getamis/sol2proto/pb/messages.proto";
+
+
+message AllowanceReq {
+    string arg = 1;
+    string arg = 2;
+}
+
+message AllowanceResp {
+    bytes arg = 1;
+}
+
+message ApproveAndCallReq {
+    string spender = 1;
+    bytes value = 2;
+    repeated bytes extra_data = 3;
+    TransactOpts opts = 4;
+}
+
+message ApproveAndCallResp {
+    bool success = 1;
+}
+
+message ApproveReq {
+    string spender = 1;
+    bytes value = 2;
+    TransactOpts opts = 3;
+}
+
+message ApproveResp {
+    bool success = 1;
+}
+
+message BalanceOfReq {
+    string arg = 1;
+}
+
+message BalanceOfResp {
+    bytes arg = 1;
+}
+
+message BurnFromReq {
+    string from = 1;
+    bytes value = 2;
+    TransactOpts opts = 3;
+}
+
+message BurnFromResp {
+    bool success = 1;
+}
+
+message BurnReq {
+    bytes value = 1;
+    TransactOpts opts = 2;
+}
+
+message BurnResp {
+    bool success = 1;
+}
+
+message DecimalsResp {
+    byte arg = 1;
+}
+
+message NameResp {
+    string arg = 1;
+}
+
+message OnApprovalReq {
+    string owner = 1;
+    string spender = 2;
+    bytes value = 3;
+}
+
+message OnBurnReq {
+    string from = 1;
+    bytes value = 2;
+}
+
+message OnTransferReq {
+    string from = 1;
+    string to = 2;
+    bytes value = 3;
+}
+
+message SymbolResp {
+    string arg = 1;
+}
+
+message TotalSupplyResp {
+    bytes arg = 1;
+}
+
+message TransferFromReq {
+    string from = 1;
+    string to = 2;
+    bytes value = 3;
+    TransactOpts opts = 4;
+}
+
+message TransferFromResp {
+    bool success = 1;
+}
+
+message TransferReq {
+    string to = 1;
+    bytes value = 2;
+    TransactOpts opts = 3;
+}
+
+message TransferResp {
+    bool success = 1;
+}
+
+service Token {
+    rpc allowance(AllowanceReq) returns (AllowanceResp) {}
+    rpc approve(ApproveReq) returns (TransactionResp) {}
+    rpc approveAndCall(ApproveAndCallReq) returns (TransactionResp) {}
+    rpc balanceOf(BalanceOfReq) returns (BalanceOfResp) {}
+    rpc burn(BurnReq) returns (TransactionResp) {}
+    rpc burnFrom(BurnFromReq) returns (TransactionResp) {}
+    rpc decimals(Empty) returns (DecimalsResp) {}
+    rpc name(Empty) returns (NameResp) {}
+    rpc symbol(Empty) returns (SymbolResp) {}
+    rpc totalSupply(Empty) returns (TotalSupplyResp) {}
+    rpc transfer(TransferReq) returns (TransactionResp) {}
+    rpc transferFrom(TransferFromReq) returns (TransactionResp) {}
+
+    // Not supported yet
+    // rpc onApproval(OnApprovalReq) returns (TransactionResp) {}
+    // rpc onBurn(OnBurnReq) returns (TransactionResp) {}
+    // rpc onTransfer(OnTransferReq) returns (TransactionResp) {}
+}
