@@ -2,153 +2,217 @@ syntax = "proto3";
 
 package token_service;
 
-message Empty {
-}
+import "google/api/annotations.proto";
+
+message Empty {}
 
 message TransactOpts {
-    string from_address = 1;
-    string private_key = 2;
-    int64 nonce = 3;
-    int64 value = 4;
-    int64 gas_price = 5;
-    int64 gas_limit = 6;
+  string from_address = 1;
+  string private_key = 2;
+  int64 nonce = 3;
+  int64 value = 4;
+  int64 gas_price = 5;
+  int64 gas_limit = 6;
 }
 
 message TransactionReq {
-    TransactOpts opts = 1;
+  TransactOpts opts = 1;
 }
 
 message TransactionResp {
-    string tx_hash = 1;
+  string tx_hash = 1;
 }
 
 message AllowanceReq {
-    string arg = 1;
-    string arg2 = 2;
+  string arg = 1;
+  string arg2 = 2;
 }
 
 message AllowanceResp {
-    bytes arg = 1;
+  bytes arg = 1;
 }
 
 message ApproveAndCallReq {
-    string spender = 1;
-    bytes value = 2;
-    repeated bytes extra_data = 3;
-    TransactOpts opts = 4;
+  string spender = 1;
+  bytes value = 2;
+  repeated bytes extra_data = 3;
+  TransactOpts opts = 4;
 }
 
 message ApproveAndCallResp {
-    bool success = 1;
+  bool success = 1;
 }
 
 message ApproveReq {
-    string spender = 1;
-    bytes value = 2;
-    TransactOpts opts = 3;
+  string spender = 1;
+  bytes value = 2;
+  TransactOpts opts = 3;
 }
 
 message ApproveResp {
-    bool success = 1;
+  bool success = 1;
 }
 
 message BalanceOfReq {
-    string arg = 1;
+  string arg = 1;
 }
 
 message BalanceOfResp {
-    bytes arg = 1;
+  bytes arg = 1;
 }
 
 message BurnFromReq {
-    string from = 1;
-    bytes value = 2;
-    TransactOpts opts = 3;
+  string from = 1;
+  bytes value = 2;
+  TransactOpts opts = 3;
 }
 
 message BurnFromResp {
-    bool success = 1;
+  bool success = 1;
 }
 
 message BurnReq {
-    bytes value = 1;
-    TransactOpts opts = 2;
+  bytes value = 1;
+  TransactOpts opts = 2;
 }
 
 message BurnResp {
-    bool success = 1;
+  bool success = 1;
 }
 
 message DecimalsResp {
-    bytes arg = 1;
+  bytes arg = 1;
 }
 
 message NameResp {
-    string arg = 1;
+  string arg = 1;
 }
 
 message OnApprovalReq {
-    string owner = 1;
-    string spender = 2;
-    bytes value = 3;
+  string owner = 1;
+  string spender = 2;
+  bytes value = 3;
 }
 
 message OnBurnReq {
-    string from = 1;
-    bytes value = 2;
+  string from = 1;
+  bytes value = 2;
 }
 
 message OnTransferReq {
-    string from = 1;
-    string to = 2;
-    bytes value = 3;
+  string from = 1;
+  string to = 2;
+  bytes value = 3;
 }
 
 message SymbolResp {
-    string arg = 1;
+  string arg = 1;
 }
 
 message TotalSupplyResp {
-    bytes arg = 1;
+  bytes arg = 1;
 }
 
 message TransferFromReq {
-    string from = 1;
-    string to = 2;
-    bytes value = 3;
-    TransactOpts opts = 4;
+  string from = 1;
+  string to = 2;
+  bytes value = 3;
+  TransactOpts opts = 4;
 }
 
 message TransferFromResp {
-    bool success = 1;
+  bool success = 1;
 }
 
 message TransferReq {
-    string to = 1;
-    bytes value = 2;
-    TransactOpts opts = 3;
+  string to = 1;
+  bytes value = 2;
+  TransactOpts opts = 3;
 }
 
 message TransferResp {
-    bool success = 1;
+  bool success = 1;
 }
 
 service Token {
-    rpc allowance(AllowanceReq) returns (AllowanceResp) {}
-    rpc approve(ApproveReq) returns (TransactionResp) {}
-    rpc approveAndCall(ApproveAndCallReq) returns (TransactionResp) {}
-    rpc balanceOf(BalanceOfReq) returns (BalanceOfResp) {}
-    rpc burn(BurnReq) returns (TransactionResp) {}
-    rpc burnFrom(BurnFromReq) returns (TransactionResp) {}
-    rpc decimals(Empty) returns (DecimalsResp) {}
-    rpc name(Empty) returns (NameResp) {}
-    rpc symbol(Empty) returns (SymbolResp) {}
-    rpc totalSupply(Empty) returns (TotalSupplyResp) {}
-    rpc transfer(TransferReq) returns (TransactionResp) {}
-    rpc transferFrom(TransferFromReq) returns (TransactionResp) {}
-
-    // Not supported yet
-    // rpc onApproval(OnApprovalReq) returns (TransactionResp) {}
-    // rpc onBurn(OnBurnReq) returns (TransactionResp) {}
-    // rpc onTransfer(OnTransferReq) returns (TransactionResp) {}
+  rpc allowance(AllowanceReq) returns (AllowanceResp) {
+    option (google.api.http) = {
+      post: "/token/allowance"
+      body: "*"
+    };
+  }
+  rpc approve(ApproveReq) returns (TransactionResp) {
+    option (google.api.http) = {
+      post: "/token/approve"
+      body: "*"
+    };
+  }
+  rpc approveAndCall(ApproveAndCallReq) returns (TransactionResp) {
+    option (google.api.http) = {
+      post: "/token/approve-and-call"
+      body: "*"
+    };
+  }
+  rpc balanceOf(BalanceOfReq) returns (BalanceOfResp) {
+    option (google.api.http) = {
+      post: "/token/balance-of"
+      body: "*"
+    };
+  }
+  rpc burn(BurnReq) returns (TransactionResp) {
+    option (google.api.http) = {
+      post: "/token/burn-req"
+      body: "*"
+    };
+  }
+  rpc burnFrom(BurnFromReq) returns (TransactionResp) {
+    option (google.api.http) = {
+      post: "/token/burn-from"
+      body: "*"
+    };
+  }
+  rpc decimals(Empty) returns (DecimalsResp);
+  rpc name(Empty) returns (NameResp) {
+    option (google.api.http) = {
+      post: "/token/name"
+      body: "*"
+    };
+  }
+  rpc symbol(Empty) returns (SymbolResp);
+  rpc totalSupply(Empty) returns (TotalSupplyResp) {
+    option (google.api.http) = {
+      post: "/token/total-supply"
+      body: "*"
+    };
+  }
+  rpc transfer(TransferReq) returns (TransactionResp) {
+    option (google.api.http) = {
+      post: "/token/transfer"
+      body: "*"
+    };
+  }
+  rpc transferFrom(TransferFromReq) returns (TransactionResp) {
+    option (google.api.http) = {
+      post: "/token/transfer-from"
+      body: "*"
+    };
+  }
+  rpc onApproval(OnApprovalReq) returns (TransactionResp) {
+    option (google.api.http) = {
+      post: "/token/on-approval"
+      body: "*"
+    };
+  }
+  rpc onBurn(OnBurnReq) returns (TransactionResp) {
+    option (google.api.http) = {
+      post: "/token/on-burn"
+      body: "*"
+    };
+  }
+  rpc onTransfer(OnTransferReq) returns (TransactionResp) {
+    option (google.api.http) = {
+      post: "/token/on-transfer"
+      body: "*"
+    };
+  }
 }

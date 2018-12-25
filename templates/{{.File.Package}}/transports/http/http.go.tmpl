@@ -11,7 +11,7 @@ import (
     pb "{{cat .GoPWD "/" .DestinationDir | nospace | clean}}"
     gokit_endpoint "github.com/go-kit/kit/endpoint"
     httptransport "github.com/go-kit/kit/transport/http"
-    endpoints "{{cat .GoPWD "/" .DestinationDir | nospace | clean}}/endpoints"
+    endpoints "{{cat .GoPWD "/" .DestinationDir | nospace | clean}}/contracts/{{$packageName := .File.Name | base | replace ".proto" ""}}{{$packageName}}/endpoints"
 )
 
 var _ = log.Printf

@@ -1,16 +1,16 @@
 package account
 
 import (
-"context"
-"crypto/ecdsa"
-"fmt"
-"math/big"
-"os"
+	"context"
+	"crypto/ecdsa"
+	"fmt"
+	"math/big"
+	"os"
 
-"github.com/ethereum/go-ethereum/accounts/abi/bind"
-"github.com/ethereum/go-ethereum/common"
-"github.com/ethereum/go-ethereum/crypto"
-"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/ethclient"
 )
 
 type account struct {
@@ -34,7 +34,7 @@ func New(conn *ethclient.Client, key string) account {
 	}
 	acc.privateKey = privateKey
 	acc.auth = bind.NewKeyedTransactor(privateKey)
-	acc.auth.GasLimit = big.NewInt(int64(4712388))
+	acc.auth.GasLimit = uint64(4712388)
 
 	// get nonce
 	nonce, err := conn.NonceAt(context.Background(), acc.auth.From, nil)

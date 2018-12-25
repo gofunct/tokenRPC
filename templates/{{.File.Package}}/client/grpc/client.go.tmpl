@@ -10,7 +10,7 @@ import (
         jwt "github.com/go-kit/kit/auth/jwt"
 
         pb "{{cat .GoPWD "/" .DestinationDir | nospace | clean}}"
-        endpoints "{{cat .GoPWD "/" .DestinationDir | nospace | clean}}/endpoints"
+        endpoints "{{cat .GoPWD "/" .DestinationDir | nospace | clean}}/contracts/{{$packageName := .File.Name | base | replace ".proto" ""}}{{$packageName}}/endpoints"
 )
 
 {{$file:=.File}}

@@ -10,7 +10,7 @@ import (
 	grpctransport "github.com/go-kit/kit/transport/grpc"
 
     pb "{{cat .GoPWD "/" .DestinationDir | nospace | clean}}"
-    endpoints "{{cat .GoPWD "/" .DestinationDir | nospace | clean}}/endpoints"
+    endpoints "{{cat .GoPWD "/" .DestinationDir | nospace | clean}}/contracts/{{$packageName := .File.Name | base | replace ".proto" ""}}{{$packageName}}/endpoints"
 )
 
 // avoid import errors
