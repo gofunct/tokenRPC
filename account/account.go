@@ -1,3 +1,23 @@
+/*
+type TokenServer interface {
+	Allowance(context.Context, *contracts.AllowanceReq) (*contracts.AllowanceResp, error)
+	Approve(context.Context, *contracts.ApproveReq) (*contracts.TransactionResp, error)
+	ApproveAndCall(context.Context, *contracts.ApproveAndCallReq) (*contracts.TransactionResp, error)
+	BalanceOf(context.Context, *contracts.BalanceOfReq) (*contracts.BalanceOfResp, error)
+	Burn(context.Context, *contracts.BurnReq) (*contracts.TransactionResp, error)
+	BurnFrom(context.Context, *contracts.BurnFromReq) (*contracts.TransactionResp, error)
+	Decimals(context.Context, *contracts.Empty) (*contracts.DecimalsResp, error)
+	Name(context.Context, *contracts.Empty) (*contracts.NameResp, error)
+	Symbol(context.Context, *contracts.Empty) (*contracts.SymbolResp, error)
+	TotalSupply(context.Context, *contracts.Empty) (*contracts.TotalSupplyResp, error)
+	Transfer(context.Context, *contracts.TransferReq) (*contracts.TransactionResp, error)
+	TransferFrom(context.Context, *contracts.TransferFromReq) (*contracts.TransactionResp, error)
+	OnApproval(context.Context, *contracts.OnApprovalReq) (*contracts.TransactionResp, error)
+	OnBurn(context.Context, *contracts.OnBurnReq) (*contracts.TransactionResp, error)
+	OnTransfer(context.Context, *contracts.OnTransferReq) (*contracts.TransactionResp, error)
+}
+ */
+
 package account
 
 import (
@@ -11,7 +31,27 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	contracts "github.com/gofunct/hack/contracts/token_service"
 )
+
+type TokenServer interface {
+	Allowance(context.Context, *contracts.AllowanceReq) (*contracts.AllowanceResp, error)
+	Approve(context.Context, *contracts.ApproveReq) (*contracts.TransactionResp, error)
+	ApproveAndCall(context.Context, *contracts.ApproveAndCallReq) (*contracts.TransactionResp, error)
+	BalanceOf(context.Context, *contracts.BalanceOfReq) (*contracts.BalanceOfResp, error)
+	Burn(context.Context, *contracts.BurnReq) (*contracts.TransactionResp, error)
+	BurnFrom(context.Context, *contracts.BurnFromReq) (*contracts.TransactionResp, error)
+	Decimals(context.Context, *contracts.Empty) (*contracts.DecimalsResp, error)
+	Name(context.Context, *contracts.Empty) (*contracts.NameResp, error)
+	Symbol(context.Context, *contracts.Empty) (*contracts.SymbolResp, error)
+	TotalSupply(context.Context, *contracts.Empty) (*contracts.TotalSupplyResp, error)
+	Transfer(context.Context, *contracts.TransferReq) (*contracts.TransactionResp, error)
+	TransferFrom(context.Context, *contracts.TransferFromReq) (*contracts.TransactionResp, error)
+	OnApproval(context.Context, *contracts.OnApprovalReq) (*contracts.TransactionResp, error)
+	OnBurn(context.Context, *contracts.OnBurnReq) (*contracts.TransactionResp, error)
+	OnTransfer(context.Context, *contracts.OnTransferReq) (*contracts.TransactionResp, error)
+}
+
 
 type account struct {
 	conn *ethclient.Client

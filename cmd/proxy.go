@@ -9,6 +9,7 @@ import (
 	"log"
 	"net"
 	"os"
+	contracts "github.com/gofunct/hack/contracts/token_service"
 )
 
 func init() {
@@ -54,7 +55,7 @@ to quickly create a Cobra application.`,
 		}
 
 		s := grpc.NewServer()
-		//contracts.RegisterTokenServer(s, contracts.NewTokenServer(addr, conn))
+		contracts.RegisterTokenServer(s, contracts.N(addr, conn))
 
 		lis, err := net.Listen("tcp", serverAddr)
 		if err != nil {
