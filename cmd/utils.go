@@ -2,9 +2,11 @@ package cmd
 
 import (
 	"encoding/json"
+	kitlog "github.com/go-kit/kit/log"
 	"github.com/gorilla/handlers"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"io"
 	"net"
 	"net/http"
@@ -16,14 +18,13 @@ import (
 )
 
 func logFormatter() handlers.LogFormatter {
-
 	// Setup logrus
 	logrus.SetFormatter(&logrus.JSONFormatter{
 		FieldMap: logrus.FieldMap{
 			logrus.FieldKeyTime: "@timestamp",
 		},
 	})
-	level, err := logrus.ParseLevel(logLevel)
+	level, err := logrus.ParseLevel(ethConfig.LogLevel)
 	if err != nil {
 		logrus.SetLevel(logrus.InfoLevel)
 	} else {
@@ -66,7 +67,7 @@ func logFormatter() handlers.LogFormatter {
 		}
 
 		// Only append headers if explicitly enabled
-		if logHeaders {
+		if gatewayConfig.LogHeaders {
 			if headers, err := json.Marshal(params.Request.Header); err == nil {
 				fields["headers"] = string(headers)
 			} else {
@@ -80,16 +81,16 @@ func logFormatter() handlers.LogFormatter {
 
 func allowCors(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		corsAllowOrigin := corsAllowOrigin
+		corsAllowOrigin := gatewayConfig.CorsAllowOrigin
 		if corsAllowOrigin == "*" {
 			if origin := req.Header.Get("Origin"); origin != "" {
 				corsAllowOrigin = origin
 			}
 		}
 		w.Header().Set("Access-Control-Allow-Origin", corsAllowOrigin)
-		w.Header().Set("Access-Control-Allow-Credentials", corsAllowCredentials)
-		w.Header().Set("Access-Control-Allow-Methods", corsAllowMethods)
-		w.Header().Set("Access-Control-Allow-Headers", corsAllowHeaders)
+		w.Header().Set("Access-Control-Allow-Credentials", gatewayConfig.CorsAllowCredentials)
+		w.Header().Set("Access-Control-Allow-Methods", gatewayConfig.CorsAllowMethods)
+		w.Header().Set("Access-Control-Allow-Headers", gatewayConfig.CorsAllowHeaders)
 		if req.Method == "OPTIONS" && req.Header.Get("Access-Control-Request-Method") != "" {
 			return
 		}
@@ -173,8 +174,6 @@ func outgoingHeaderMatcher(metadata string) (string, bool) {
 	return metadata, true
 }
 
-
-
 // SignalRunner runs a runner function until an interrupt signal is received, at which point it
 // will call stopper.
 func SignalRunner(runner, stopper func()) {
@@ -190,4 +189,12 @@ func SignalRunner(runner, stopper func()) {
 	case <-signals:
 		stopper()
 	}
+}
+
+func GetConfig() *viper.Viper {
+	return defaultConfig
+}
+
+func GetKitLogger() kitlog.Logger {
+	return kitLog
 }

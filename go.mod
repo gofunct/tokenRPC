@@ -11,6 +11,8 @@ require (
 	github.com/ethereum/go-ethereum v1.8.20
 	github.com/fiorix/protoc-gen-cobra v0.0.0-20181029091941-dffa0bfa45cc
 	github.com/fjl/memsize v0.0.0-20180929194037-2a09253e352a // indirect
+	github.com/go-kit/kit v0.8.0
+	github.com/go-logfmt/logfmt v0.4.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gogo/protobuf v1.2.0
 	github.com/golang/protobuf v1.2.0

@@ -3,19 +3,19 @@ package cmd
 import (
 	"context"
 	"fmt"
+	contracts "github.com/gofunct/hack/contracts/token_service"
+	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"os"
-	"github.com/spf13/cobra"
-	contracts "github.com/gofunct/hack/contracts/token_service"
 )
 
 // clientCmd represents the client command
 var clientCmd = &cobra.Command{
 	Use:   "client",
-	Short: "A brief description of your command",
+	Short: "Interact with the grpc-ethereum proxy server",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Set up a connection to the server.
-		conn, err := grpc.Dial(serverAddr, grpc.WithInsecure())
+		conn, err := grpc.Dial(ethConfig.ServerAddr, grpc.WithInsecure())
 		if err != nil {
 			fmt.Printf("Did not connect: %v\n", err)
 			os.Exit(-1)
@@ -27,7 +27,7 @@ var clientCmd = &cobra.Command{
 		// Contact the server and print out its response.
 		tx, err := c.Transfer(context.Background(), &contracts.TransferReq{
 			Opts: &contracts.TransactOpts{
-				PrivateKey: privateKey,
+				PrivateKey: ethConfig.PrivateKey,
 			},
 		})
 
