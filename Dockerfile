@@ -1,7 +1,5 @@
-# Template for grpc-gateway 
-
 ARG alpine_version=3.8
-FROM golang:1.10-alpine$alpine_version AS build
+FROM golang:1.11-alpine$alpine_version AS build
 
 RUN apk add --update --no-cache git
 WORKDIR /app
@@ -16,13 +14,13 @@ RUN go get ./...
 WORKDIR /app
 
 # Build the gateway
-RUN go build -o grpc_gateway src/pkg/main/main.go
+RUN go build -o hack .
 
 FROM alpine:$alpine_version
 WORKDIR /app
-COPY --from=build /app/grpc_gateway /app/
-COPY --from=build /app/config.yaml /app/
-COPY --from=build /app/src/gen/pb-go/token_service.swagger.json /app/
+COPY --from=build /app/hack /app/
+COPY --from=build /app/hack.yaml /app/
+COPY --from=build /app/contracts/token_service/token_service.swagger.json /app/
 
-EXPOSE 80
-ENTRYPOINT ["/app/grpc_gateway"]
+EXPOSE 8080
+ENTRYPOINT ["/app/hack", "gateway"]
