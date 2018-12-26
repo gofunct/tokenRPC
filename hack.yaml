@@ -4,3 +4,5 @@ log-level: ""
 password: admin
 private-key: ""
 server-addr: 127.0.0.1:5555
+token-name: ""
+token-symbol: ""

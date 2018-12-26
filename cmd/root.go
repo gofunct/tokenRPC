@@ -22,6 +22,8 @@ type EthConfig struct {
 	ContractAddr string
 	Password 	string
 	LogLevel     string
+	TokenName 	string
+	TokenSymbol string
 }
 
 func init() {
@@ -48,6 +50,10 @@ func init() {
 		rootCmd.PersistentFlags().StringVar(&ethConfig.Password, "password", "admin", "private key passphrase")
 		rootCmd.MarkFlagRequired("password")
 		rootCmd.PersistentFlags().StringVar(&ethConfig.LogLevel, "log-level",  "", "logging verbosity level")
+		rootCmd.PersistentFlags().StringVar(&ethConfig.TokenName, "token-name", "", "name of eth token")
+		rootCmd.MarkFlagRequired("token-name")
+		rootCmd.PersistentFlags().StringVar(&ethConfig.TokenSymbol, "token-symbol", "", "token symbol")
+		rootCmd.MarkFlagRequired("token-symbol")
 	}
 
 	{
@@ -62,6 +68,9 @@ func init() {
 		defaultViper.BindPFlag("contract-addr", rootCmd.PersistentFlags().Lookup("contract-addr"))
 		defaultViper.BindPFlag("password", rootCmd.PersistentFlags().Lookup("password"))
 		defaultViper.BindPFlag("log-level", rootCmd.PersistentFlags().Lookup("log-level"))
+		defaultViper.BindPFlag("token-name", rootCmd.PersistentFlags().Lookup("token-name"))
+		defaultViper.BindPFlag("token-symbol", rootCmd.PersistentFlags().Lookup("token-symbol"))
+
 	}
 
 	// If a config file is found, read it in.

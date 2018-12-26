@@ -38,7 +38,7 @@ var serverCmd = &cobra.Command{
 		}
 
 		// Deploy a new awesome contract for the binding demo
-		address, tx, token, err := contracts.DeployToken(auth, conn, new(big.Int), "Colecoin", "C$")
+		address, tx, token, err := contracts.DeployToken(auth, conn, new(big.Int), ethConfig.TokenName, ethConfig.TokenSymbol)
 		if err != nil {
 			log.Fatalf("Failed to deploy new token contract: %v", err)
 		}
