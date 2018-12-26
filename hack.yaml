@@ -1,5 +1,6 @@
 contract-addr: ""
 eth-addr: http://192.168.99.100:8545
 log-level: ""
+password: admin
 private-key: ""
 server-addr: 127.0.0.1:5555

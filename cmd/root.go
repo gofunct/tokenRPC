@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	defaultConfig = viper.New()
+	defaultViper = viper.New()
 	kitLog        = kitlog.NewJSONLogger(kitlog.NewSyncWriter(os.Stdout))
 	ethConfig     = &EthConfig{}
 )
@@ -20,6 +20,7 @@ type EthConfig struct {
 	ServerAddr   string
 	PrivateKey   string
 	ContractAddr string
+	Password 	string
 	LogLevel     string
 }
 
@@ -36,41 +37,44 @@ func init() {
 	}
 
 	{
-		rootCmd.PersistentFlags().StringVarP(&ethConfig.EthAddr, "eth-addr", "c", "http://192.168.99.100:8545", "the ethereum client address")
+		rootCmd.PersistentFlags().StringVar(&ethConfig.EthAddr, "eth-addr",  "http://192.168.99.100:8545", "the ethereum client address")
 		rootCmd.MarkFlagRequired("eth-addr")
 		rootCmd.PersistentFlags().StringVarP(&ethConfig.ServerAddr, "server-addr", "s", "127.0.0.1:5555", "server address")
 		rootCmd.MarkFlagRequired("server-addr")
 		rootCmd.PersistentFlags().StringVarP(&ethConfig.PrivateKey, "private-key", "k", "", "deployer's private key")
 		rootCmd.MarkFlagRequired("private-key")
-		rootCmd.PersistentFlags().StringVarP(&ethConfig.ContractAddr, "contract-addr", "t", "", "contract address")
+		rootCmd.PersistentFlags().StringVarP(&ethConfig.ContractAddr, "contract-addr", "c", "", "contract address")
 		rootCmd.MarkFlagRequired("contract-addr")
-		rootCmd.PersistentFlags().StringVarP(&ethConfig.LogLevel, "log-level", "l", "", "logging verbosity level")
+		rootCmd.PersistentFlags().StringVar(&ethConfig.Password, "password", "admin", "private key passphrase")
+		rootCmd.MarkFlagRequired("password")
+		rootCmd.PersistentFlags().StringVar(&ethConfig.LogLevel, "log-level",  "", "logging verbosity level")
 	}
 
 	{
-		defaultConfig.SetConfigName("hack")
-		defaultConfig.AutomaticEnv()
-		defaultConfig.AddConfigPath(os.Getenv("$HOME")) // name of config file (without extension)
-		defaultConfig.AddConfigPath(".")
-		defaultConfig.SetEnvPrefix("hack")
-		defaultConfig.BindPFlag("eth-addr", rootCmd.PersistentFlags().Lookup("eth-addr"))
-		defaultConfig.BindPFlag("server-addr", rootCmd.PersistentFlags().Lookup("server-addr"))
-		defaultConfig.BindPFlag("private-key", rootCmd.PersistentFlags().Lookup("private-key"))
-		defaultConfig.BindPFlag("contract-addr", rootCmd.PersistentFlags().Lookup("contract-addr"))
-		defaultConfig.BindPFlag("log-level", rootCmd.PersistentFlags().Lookup("log-level"))
+		defaultViper.SetConfigName("hack")
+		defaultViper.AutomaticEnv()
+		defaultViper.AddConfigPath(os.Getenv("$HOME")) // name of config file (without extension)
+		defaultViper.AddConfigPath(".")
+		defaultViper.SetEnvPrefix("hack")
+		defaultViper.BindPFlag("eth-addr", rootCmd.PersistentFlags().Lookup("eth-addr"))
+		defaultViper.BindPFlag("server-addr", rootCmd.PersistentFlags().Lookup("server-addr"))
+		defaultViper.BindPFlag("private-key", rootCmd.PersistentFlags().Lookup("private-key"))
+		defaultViper.BindPFlag("contract-addr", rootCmd.PersistentFlags().Lookup("contract-addr"))
+		defaultViper.BindPFlag("password", rootCmd.PersistentFlags().Lookup("password"))
+		defaultViper.BindPFlag("log-level", rootCmd.PersistentFlags().Lookup("log-level"))
 	}
 
 	// If a config file is found, read it in.
-	if err := defaultConfig.ReadInConfig(); err != nil {
+	if err := defaultViper.ReadInConfig(); err != nil {
 		log.Println("failed to read config file, writing defaults...")
-		if err := defaultConfig.WriteConfigAs("hack" + ".yaml"); err != nil {
+		if err := defaultViper.WriteConfigAs("hack" + ".yaml"); err != nil {
 			log.Fatal("failed to write config")
 			os.Exit(1)
 		}
 
 	} else {
-		log.Print("Using config file: ", defaultConfig.ConfigFileUsed())
-		if err := defaultConfig.WriteConfig(); err != nil {
+		log.Print("Using config file: ", defaultViper.ConfigFileUsed())
+		if err := defaultViper.WriteConfig(); err != nil {
 			log.Fatal("failed to write config file")
 			os.Exit(1)
 		}

@@ -1,0 +1,8 @@
+allow-creds: ""
+allow-headers: ""
+allow-methods: ""
+allow-origin: ""
+log-headers: true
+port: 8080
+prefix: token
+swagger-file: swagger.json

@@ -191,8 +191,8 @@ func SignalRunner(runner, stopper func()) {
 	}
 }
 
-func GetConfig() *viper.Viper {
-	return defaultConfig
+func GetDefaultConfig() *viper.Viper {
+	return defaultViper
 }
 
 func GetKitLogger() kitlog.Logger {

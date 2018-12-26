@@ -32,7 +32,7 @@ var serverCmd = &cobra.Command{
 		// Deploy contracts
 		var addr common.Address
 
-		auth, err := bind.NewTransactor(strings.NewReader(ethConfig.PrivateKey), "admin")
+		auth, err := bind.NewTransactor(strings.NewReader(ethConfig.PrivateKey), ethConfig.Password)
 		if err != nil {
 			log.Fatalf("Failed to create authorized transactor: %v", err)
 		}

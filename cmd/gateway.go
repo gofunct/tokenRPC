@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/spf13/viper"
 	"google.golang.org/grpc"
+	"log"
 	"net/http"
 	"os"
 
@@ -26,22 +28,71 @@ type GatewayConfig struct {
 	ApiPrefix            string
 }
 
-var gatewayConfig = &GatewayConfig{}
+var (
+	gatewayConfig = &GatewayConfig{}
+	gatewayViper = viper.New()
+)
 
 func init() {
-	gatewayCmd.Flags().IntVarP(&gatewayConfig.Port, "port", "p", 8080, "port to run gateway on")
-	gatewayCmd.PersistentFlags().BoolVarP(&gatewayConfig.LogHeaders, "log-headers", "u", true, "server address to dial")
-	gatewayCmd.PersistentFlags().StringVarP(&gatewayConfig.SwaggerFile, "swagger-file", "g", "swagger.json", "path to generated swagger file")
-	gatewayCmd.PersistentFlags().StringVarP(&gatewayConfig.CorsAllowOrigin, "allow-origin", "o", "", "CORS origin")
-	gatewayCmd.PersistentFlags().StringVarP(&gatewayConfig.CorsAllowCredentials, "allow-creds", "d", "", "CORS credentials")
-	gatewayCmd.PersistentFlags().StringVarP(&gatewayConfig.CorsAllowMethods, "allow-methods", "m", "", "CORS methods")
-	gatewayCmd.PersistentFlags().StringVarP(&gatewayConfig.CorsAllowHeaders, "allow-headers", "r", "", "CORS headers")
-	gatewayCmd.PersistentFlags().StringVarP(&gatewayConfig.ApiPrefix, "prefix", "x", "token", "api prefix")
+	{
+		gatewayCmd.AddCommand(gatewayServeCmd)
+	}
+
+	{
+		gatewayCmd.Flags().IntVarP(&gatewayConfig.Port, "port", "p", 8080, "port to run gateway on")
+		gatewayCmd.Flags().BoolVar(&gatewayConfig.LogHeaders, "log-headers", true, "log headers")
+		gatewayCmd.Flags().StringVar(&gatewayConfig.SwaggerFile, "swagger-file", "swagger.json", "path to generated swagger file")
+		gatewayCmd.Flags().StringVar(&gatewayConfig.CorsAllowOrigin, "allow-origin", "", "CORS origin")
+		gatewayCmd.Flags().StringVar(&gatewayConfig.CorsAllowCredentials, "allow-creds", "", "CORS credentials")
+		gatewayCmd.Flags().StringVar(&gatewayConfig.CorsAllowMethods, "allow-methods", "", "CORS methods")
+		gatewayCmd.Flags().StringVar(&gatewayConfig.CorsAllowHeaders, "allow-headers", "", "CORS headers")
+		gatewayCmd.Flags().StringVar(&gatewayConfig.ApiPrefix, "prefix", "token", "api prefix")
+	}
+
+	{
+		gatewayViper.SetConfigName("hack-gateway")
+		gatewayViper.AutomaticEnv()
+		gatewayViper.AddConfigPath(os.Getenv("$HOME")) // name of config file (without extension)
+		gatewayViper.AddConfigPath(".")
+		gatewayViper.SetEnvPrefix("hack_gateway")
+
+		gatewayViper.BindPFlag("port", gatewayCmd.Flags().Lookup("port"))
+		gatewayViper.BindPFlag("log-headers", gatewayCmd.Flags().Lookup("log-headers"))
+		gatewayViper.BindPFlag("swagger-file", gatewayCmd.Flags().Lookup("swagger-file"))
+		gatewayViper.BindPFlag("allow-origin", gatewayCmd.Flags().Lookup("allow-origin"))
+		gatewayViper.BindPFlag("allow-creds", gatewayCmd.Flags().Lookup("allow-creds"))
+		gatewayViper.BindPFlag("allow-methods", gatewayCmd.Flags().Lookup("allow-methods"))
+		gatewayViper.BindPFlag("allow-headers", gatewayCmd.Flags().Lookup("allow-headers"))
+		gatewayViper.BindPFlag("prefix", gatewayCmd.Flags().Lookup("prefix"))
+
+	}
+
+	// If a config file is found, read it in.
+	if err := gatewayViper.ReadInConfig(); err != nil {
+		log.Println("failed to read config file, writing defaults...")
+		if err := gatewayViper.WriteConfigAs("hack-gateway" + ".yaml"); err != nil {
+			log.Fatal("failed to write config")
+			os.Exit(1)
+		}
+
+	} else {
+		log.Print("Using config file: ", gatewayViper.ConfigFileUsed())
+		if err := gatewayViper.WriteConfig(); err != nil {
+			log.Fatal("failed to write config file")
+			os.Exit(1)
+		}
+	}
 }
 
 // gatewayCmd represents the gateway command
 var gatewayCmd = &cobra.Command{
 	Use:   "gateway",
+	Short: "A REST to gRPC server gateway",
+}
+
+// gatewayCmd represents the gateway command
+var gatewayServeCmd = &cobra.Command{
+	Use:   "serve",
 	Short: "A REST to gRPC server gateway",
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := context.Background()
