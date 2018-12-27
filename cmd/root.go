@@ -57,11 +57,11 @@ func init() {
 	}
 
 	{
-		defaultViper.SetConfigName("hack")
+		defaultViper.SetConfigName("tokenRPC")
 		defaultViper.AutomaticEnv()
 		defaultViper.AddConfigPath(os.Getenv("$HOME")) // name of config file (without extension)
 		defaultViper.AddConfigPath(".")
-		defaultViper.SetEnvPrefix("hack")
+		defaultViper.SetEnvPrefix("tokenRPC")
 		defaultViper.BindPFlag("eth-addr", rootCmd.PersistentFlags().Lookup("eth-addr"))
 		defaultViper.BindPFlag("server-addr", rootCmd.PersistentFlags().Lookup("server-addr"))
 		defaultViper.BindPFlag("private-key", rootCmd.PersistentFlags().Lookup("private-key"))
@@ -76,7 +76,7 @@ func init() {
 	// If a config file is found, read it in.
 	if err := defaultViper.ReadInConfig(); err != nil {
 		log.Println("failed to read config file, writing defaults...")
-		if err := defaultViper.WriteConfigAs("hack" + ".yaml"); err != nil {
+		if err := defaultViper.WriteConfigAs("tokenRPC" + ".yaml"); err != nil {
 			log.Fatal("failed to write config")
 			os.Exit(1)
 		}
@@ -91,7 +91,7 @@ func init() {
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "hack",
+	Use:   "tokenRPC",
 	Short: "A grpc based microservice for interacting with ethereum contracts",
 }
 

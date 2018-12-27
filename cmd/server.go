@@ -5,7 +5,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
-	contracts "github.com/gofunct/hack/contracts/token_service"
+	contracts "github.com/gofunct/tokenRPC/contracts/token_service"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"log"

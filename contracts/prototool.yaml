@@ -121,7 +121,7 @@ protoc:
 
 generate:
   go_options:
-    import_path: github.com/gofunct/hack/contracts
+    import_path: github.com/gofunct/tokenRPC/contracts
   plugins:
   - name: gogoslick
     type: gogo

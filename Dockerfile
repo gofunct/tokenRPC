@@ -14,13 +14,13 @@ RUN go get ./...
 WORKDIR /app
 
 # Build the gateway
-RUN go build -o hack .
+RUN go build -o tokenRPC .
 
 FROM alpine:$alpine_version
 WORKDIR /app
-COPY --from=build /app/hack /app/
-COPY --from=build /app/hack.yaml /app/
+COPY --from=build /app/tokenRPC /app/
+COPY --from=build /app/tokenRPC.yaml /app/
 COPY --from=build /app/contracts/token_service/token_service.swagger.json /app/
 
 EXPOSE 8080
-ENTRYPOINT ["/app/hack", "gateway"]
+ENTRYPOINT ["/app/tokenRPC", "gateway"]

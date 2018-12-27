@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gofunct/hack/contracts/token_service"
+	"github.com/gofunct/tokenRPC/contracts/token_service"
 	"github.com/gorilla/handlers"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/sirupsen/logrus"
@@ -50,11 +50,11 @@ func init() {
 	}
 
 	{
-		gatewayViper.SetConfigName("hack-gateway")
+		gatewayViper.SetConfigName("tokenRPC-gateway")
 		gatewayViper.AutomaticEnv()
 		gatewayViper.AddConfigPath(os.Getenv("$HOME")) // name of config file (without extension)
 		gatewayViper.AddConfigPath(".")
-		gatewayViper.SetEnvPrefix("hack_gateway")
+		gatewayViper.SetEnvPrefix("tokenRPC_gateway")
 
 		gatewayViper.BindPFlag("port", gatewayCmd.Flags().Lookup("port"))
 		gatewayViper.BindPFlag("log-headers", gatewayCmd.Flags().Lookup("log-headers"))
@@ -70,7 +70,7 @@ func init() {
 	// If a config file is found, read it in.
 	if err := gatewayViper.ReadInConfig(); err != nil {
 		log.Println("failed to read config file, writing defaults...")
-		if err := gatewayViper.WriteConfigAs("hack-gateway" + ".yaml"); err != nil {
+		if err := gatewayViper.WriteConfigAs("tokenRPC-gateway" + ".yaml"); err != nil {
 			log.Fatal("failed to write config")
 			os.Exit(1)
 		}

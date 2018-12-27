@@ -3,7 +3,7 @@ package cmd
 import (
 	"context"
 	"fmt"
-	contracts "github.com/gofunct/hack/contracts/token_service"
+	contracts "github.com/gofunct/tokenRPC/contracts/token_service"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
 	"os"

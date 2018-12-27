@@ -1,4 +1,4 @@
-# hack
+# tokenRPC
 
 **A gRPC Powered Blockchain Microservice**
 

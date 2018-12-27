@@ -1,6 +1,6 @@
 package main
 
-import "github.com/gofunct/hack/cmd"
+import "github.com/gofunct/tokenRPC/cmd"
 
 func main() {
 	cmd.Execute()
